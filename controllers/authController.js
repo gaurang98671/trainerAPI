@@ -31,7 +31,30 @@ exports.login = async (req, res)=>{
 }
 
 exports.signup = (req, res)=>{
-    console.log(req.body)
-    res.status(200).send("ge")
+    try{
+        const {userName, userEmail, userPassword, userPhone} = req.body
+        if(userName && userEmail && userPassword && userPhone){
+            const user = User.create({
+                "userName" : userName,
+                "userPassword" : userPassword,
+                "userEmail" : userEmail,
+                "userPhone" : userPhone
+            })
+
+            res.status(200).json({
+                "data" : user
+            })
+        }
+        else{
+            res.status(400).json({
+                "message" : "missing fields"
+            })
+        }
+    }
+    catch(e){
+        res.status(500).json({
+            "message" : "unknown error occured"
+        })
+    }
 }
 

@@ -19,7 +19,7 @@ const userSchema = mongoose.Schema({
         type : String,
     },
 
-    password :
+    userPassword :
     {
         type : String,
         require : [true, "Password is required"],
