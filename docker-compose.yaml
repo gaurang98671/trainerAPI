@@ -8,6 +8,7 @@ services:
         environment:
             - MONGO_USER=gaurang
             - MONGO_PASSWORD=123
+            - REDIS_SECRET=secret
         volumes: 
             - ./:/app
         depends_on:
@@ -20,7 +21,9 @@ services:
             - MONGO_INITDB_ROOT_PASSWORD=123
         volumes: 
             - mongo-db:/data/db
-        
+    
+    redis:
+        image: redis
 volumes: 
     mongo-db:
     myapp:
