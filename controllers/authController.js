@@ -14,24 +14,28 @@ exports.login = async (req, res)=>{
                 const accessToken = jwt.sign(userObject, process.env.ACCESS_TOKEN_SECRET,{expiresIn: "60m"})
                 const refreshToken = jwt.sign(userObject, process.env.REFRESH_TOKEN_SECRET)
                 req.session.refreshToken = refreshToken
+              
                 res.status(200).json({
                 "accessToken" :  accessToken,
                 "refreshToken" : refreshToken 
                 })
             }
             else{
+                
                 res.status(401).json({
                     "message" : "incorrect credentials"
                 })
             }
         }
         else{
+           
             res.status(400).json({
                 "message" : "missing fields"
             })
         }
     }
     catch(e){
+        
         res.status(500).json({
             "message" : "unknown error occured"
         })
