@@ -2,6 +2,7 @@ const express = require('express')
 const mongo = require('mongoose')
 const {MONGO_IP, MONGO_PORT, MONGO_USER, MONGO_PASSWORD, REDIS_URL, REDIS_PORT, REDIS_SECRET}  = require("./config/configurations")
 const auth = require("./routes/auth")
+const profile = require('./routes/userProfileRoutes')
 const redis = require('redis')
 var session = require('express-session')
 const RedisStore = require('connect-redis')(session)
@@ -28,7 +29,7 @@ app.use(function(req, res, next) {
   });
 const retryMongoConnect = ()=>{
     const mongo_url = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`
-    mongo.connect(mongo_url,{useNewUrlParser: true, useUnifiedTopology: true}).then(()=>{
+    mongo.connect(mongo_url,{useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}).then(()=>{
         console.log("Successfully connected to database...")
     }).catch((e)=>{
         console.log("Connection failed trying again...")
@@ -50,10 +51,14 @@ app.use(session({
         saveUninitialized : false
     } 
 }));
+
+
 //Connect to mongodb database
 retryMongoConnect()
 
+//Endpoints
 app.use("/auth", auth)
+app.use("/profile", profile)
 
 
 app.listen(port, ()=>{

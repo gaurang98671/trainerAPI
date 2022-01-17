@@ -1,16 +1,20 @@
 const User = require("../models/auth")
+const userProfileModel = require('../models/user_data_model')
 const session = require('express-session')
 require('dotenv').config()
 const jwt  = require('jsonwebtoken')
+
 
 
 exports.login = async (req, res)=>{
     try{
         const {userEmail, userPassword} = req.body
         if(userEmail && userPassword){
-            const user = await User.find({'userEmail': userEmail, 'userPassword': userPassword})
+            const user = await User.find({'userEmail': userEmail, 'userPassword': userPassword}) //this returns list
             if(user.length!=0){
-                const userObject = {"userEmail" : userEmail}
+                console.log(user, user[0]._id)
+                const reqUser = user[0]
+                const userObject = {"userEmail" : userEmail, "userId" : reqUser._id}
                 const accessToken = jwt.sign(userObject, process.env.ACCESS_TOKEN_SECRET,{expiresIn: "60m"})
                 const refreshToken = jwt.sign(userObject, process.env.REFRESH_TOKEN_SECRET)
                 req.session.refreshToken = refreshToken
@@ -20,7 +24,7 @@ exports.login = async (req, res)=>{
                 "refreshToken" : refreshToken 
                 })
             }
-            else{
+        else{
                 
                 res.status(401).json({
                     "message" : "incorrect credentials"
@@ -73,13 +77,24 @@ exports.signup = async (req, res)=>{
                     })
                 }
                 else{
-                    User.create({
+                   var userAuth = await User.create({
                         "userName" : userName,
                         "userPassword" : userPassword,
                         "userEmail" : userEmail,
                         "userPhone" : userPhone
                     })
-        
+
+                    //create profile
+                    var userProfile = {
+                        userEmail : userEmail,
+                        userPhone : userPhone,
+                        userName : userName,
+                        userId : userAuth._id
+                    }
+                    
+                    const userProfileDb = await userProfileModel.create(userProfile)
+                    console.log(userProfileDb)
+
                     res.status(200).json({
                         "message" : "user created"
                     })
@@ -106,19 +121,25 @@ exports.refreshToken = (req, res)=>{
     if(refreshToken){
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET,(err,verifiedToken)=>{
             if(err){
+                console.log("error occured")
                 res.send(err.message)
             }
             else{
-                const user = {"userEmail" : verifiedToken.userEmail}
+                const user = {"userEmail" : verifiedToken.userEmail, "userId" : verifiedToken.userId}
                 console.log(verifiedToken)
                 const newAccessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn : "60m"})
+                console.log("new token", newAccessToken)
                 res.status(200).json({
                     "accessToken" : newAccessToken
                 })
             }
         })
     }
-    res.status(400).json({
-        "message" : "unauthorized"
-    })
+    else{
+        console.log('unauthorized token')
+        res.status(400).json({
+            "message" : "unauthorized"
+        })
+    }
+    
 }
