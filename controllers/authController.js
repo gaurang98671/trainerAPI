@@ -15,6 +15,7 @@ exports.login = async (req, res)=>{
                 console.log(user, user[0]._id)
                 const reqUser = user[0]
                 const userObject = {"userEmail" : userEmail, "userId" : reqUser._id}
+                console.log(userObject)
                 const accessToken = jwt.sign(userObject, process.env.ACCESS_TOKEN_SECRET,{expiresIn: "60m"})
                 const refreshToken = jwt.sign(userObject, process.env.REFRESH_TOKEN_SECRET)
                 req.session.refreshToken = refreshToken

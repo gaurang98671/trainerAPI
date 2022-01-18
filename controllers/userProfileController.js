@@ -1,6 +1,6 @@
 const userProfileModel = require('../models/user_data_model')
 const session = require('express-session')
-//TODO: add middleware to check whether user is valid
+
 
 exports.getUserProfile = async (req, res) => {
     try{
@@ -13,7 +13,7 @@ exports.getUserProfile = async (req, res) => {
                 res.status(200).json(user)
             }
             else{
-                res.status(400).json({
+                res.status(404).json({
                     "message": "user not found"
                 })
             }
@@ -83,8 +83,7 @@ exports.postUserProfile = async (req, res) => {
         console.log("creating user obj")
         var userProfile = {...req.body, userBMI : bmi, userBMR : bmr, userFitnessStatus : fitnessStatus}
         var updated = await userProfileModel.findOneAndUpdate({userEmail : userEmail}, userProfile)
-        console.log('updated')
-        console.log(updated)
+       
         res.status(200).json(userProfile)
 
       

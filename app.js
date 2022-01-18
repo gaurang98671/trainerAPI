@@ -3,6 +3,7 @@ const mongo = require('mongoose')
 const {MONGO_IP, MONGO_PORT, MONGO_USER, MONGO_PASSWORD, REDIS_URL, REDIS_PORT, REDIS_SECRET}  = require("./config/configurations")
 const auth = require("./routes/auth")
 const profile = require('./routes/userProfileRoutes')
+const exercise = require('./routes/exercise')
 const redis = require('redis')
 var session = require('express-session')
 const RedisStore = require('connect-redis')(session)
@@ -59,6 +60,7 @@ retryMongoConnect()
 //Endpoints
 app.use("/auth", auth)
 app.use("/profile", profile)
+app.use("/exercise", exercise)
 
 
 app.listen(port, ()=>{

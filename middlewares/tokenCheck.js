@@ -5,7 +5,6 @@ const tokenCheck = (req, res, next)=>{
     console.log("in middleware")
     var authToken = req.headers.authorization
     
-
     if(authToken){
         var token = authToken.split(' ')[1]
 
@@ -16,8 +15,8 @@ const tokenCheck = (req, res, next)=>{
             else{
                 req.userId = verifiedToken.userId
                 req.userEmail = verifiedToken.userEmail
-                console.log(req)
-                console.log("Token verified", verifiedToken)
+                console.log(verifiedToken)
+                console.log("inserted user id", verifiedToken.userId)
                 next()
             }
         })
