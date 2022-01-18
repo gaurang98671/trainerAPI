@@ -116,8 +116,7 @@ exports.signup = async (req, res)=>{
 }
 
 exports.refreshToken = (req, res)=>{
-    const token = req.body.token
-    console.log(req.session.refreshToken)
+    
     const refreshToken = req.session.refreshToken
     if(refreshToken){
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET,(err,verifiedToken)=>{
