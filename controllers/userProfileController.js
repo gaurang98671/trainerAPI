@@ -17,7 +17,6 @@ exports.getUserProfile = async (req, res) => {
                     "message": "user not found"
                 })
             }
-
         }
         else{
                 res.status(401).json({

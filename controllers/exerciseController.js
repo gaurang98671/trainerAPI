@@ -57,7 +57,7 @@ exports.postExercise = async (req, res) => {
 
         if(!exerciseName || !muscleGroup || !exerciseDifficulty || !exerciseModelPath){
             res.status(401).json({
-                "message" : "exerciseName or muscleGroup or exerciseDifficulty is missing"
+                "message" : "exerciseName or muscleGroup or exerciseDifficulty or exerciseModelPath is missing"
             })
         }
         else{
