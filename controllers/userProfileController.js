@@ -83,7 +83,7 @@ exports.postUserProfile = async (req, res) => {
         var userProfile = {...req.body, userBMI : bmi, userBMR : bmr, userFitnessStatus : fitnessStatus}
         var updated = await userProfileModel.findOneAndUpdate({userEmail : userEmail}, userProfile)
        
-        res.status(200).json(userProfile)
+        res.status(200).json(updated)
 
       
     }

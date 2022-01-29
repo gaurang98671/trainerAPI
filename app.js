@@ -9,6 +9,7 @@ var session = require('express-session')
 const RedisStore = require('connect-redis')(session)
 const cors = require('cors')
 
+
 let redisClient = redis.createClient(
     {
         host:  REDIS_URL,
@@ -20,6 +21,7 @@ redisClient.on('connect', function (err) {
 });
 
 const app = express()
+
 const port = process.env.PORT || 8080
 app.use(cors({origin: true}))
 app.use(function(req, res, next) {
@@ -28,6 +30,8 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "x-access-token, Origin, X-Requested-With, Content-Type, Accept");
     next();
   });
+
+app.use(express.static("static"))
 const retryMongoConnect = ()=>{
     const mongo_url = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`
     mongo.connect(mongo_url,{useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}).then(()=>{
