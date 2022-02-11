@@ -40,9 +40,10 @@ exports.login = async (req, res)=>{
         }
     }
     catch(e){
-        
+       console.log(e)
         res.status(500).json({
-            "message" : "unknown error occured"
+           	 "message" : "unknown error occured",
+		"error" : e
         })
     }
 
@@ -90,7 +91,14 @@ exports.signup = async (req, res)=>{
                         userEmail : userEmail,
                         userPhone : userPhone,
                         userName : userName,
-                        userId : userAuth._id
+                        userId : userAuth._id,
+			userGender : null,
+			userHeight : null,
+			userWeight : null,
+			userBMI : null,
+			userPurpose : null,
+			userAge : null,
+			userActivity : null,
                     }
                     
                     const userProfileDb = await userProfileModel.create(userProfile)

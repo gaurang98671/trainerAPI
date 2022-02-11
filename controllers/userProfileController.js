@@ -34,14 +34,14 @@ exports.getUserProfile = async (req, res) => {
 
 exports.postUserProfile = async (req, res) => {
     const userId = req.userId
-    const {userName, userEmail, userDOB, userHeight, userWeight, userAge, userGender} = req.body
+   const {userName, userEmail, userDOB, userHeight, userWeight, userAge, userGender} = req.body
 
-    if(!userEmail || !userId || !userName){
+    if(!userName){
         res.status(400).json({
-            "message" : "userid or email or userName  is missing"
+            "message" : "userName  is missing"
         })
     }
-    
+   
     try{
         console.log("in try")
         var fitnessStatus = null
@@ -82,8 +82,8 @@ exports.postUserProfile = async (req, res) => {
         console.log("creating user obj")
         var userProfile = {...req.body, userBMI : bmi, userBMR : bmr, userFitnessStatus : fitnessStatus}
         var updated = await userProfileModel.findOneAndUpdate({userEmail : userEmail}, userProfile)
-       
-        res.status(200).json(updated)
+        var usr = await userProfileModel.find({userId : userId})  
+        res.status(200).json(usr)
 
       
     }
