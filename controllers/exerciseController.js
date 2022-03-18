@@ -51,6 +51,18 @@ exports.getExercises = async (req, res) => {
     }
 }
 
+exports.getAllExercise = async(req, res) => {
+    try{
+        exercises = await exerciseModel.find()
+        res.status(200).json(exercises)
+    }
+    catch(e){
+        res.status(500).json({
+            "message" : "Internal server error",
+            "err" : e
+        })
+    }
+}
 exports.postExercise = async (req, res) => {
     try{
         const {exerciseName, muscleGroup, exerciseDifficulty, exerciseModelPath} = req.body

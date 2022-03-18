@@ -36,12 +36,12 @@ exports.postUserProfile = async (req, res) => {
     const userId = req.userId
     const {userName, userEmail, userDOB, userHeight, userWeight, userAge, userGender} = req.body
 
-    if(!userEmail || !userId || !userName){
+    if(!userEmail){
         res.status(400).json({
             "message" : "userid or email or userName  is missing"
         })
     }
-    
+    else{
     try{
         console.log("in try")
         var fitnessStatus = null
@@ -62,7 +62,7 @@ exports.postUserProfile = async (req, res) => {
             }
             else if(bmi >= 24.9 && bmi < 30){
                 fitnessStatus = "overweight"
-            }
+            }   
             else if(bmi > 30){
                 fitnessStatus = "obese"
             } 
@@ -93,5 +93,5 @@ exports.postUserProfile = async (req, res) => {
             "error" : e
         })
     }
-
+    }
 }
