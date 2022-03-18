@@ -54,6 +54,7 @@ const userDataSchema = mongoose.Schema({
         required : [false]
     },
 
+
     userBMR : {
         type : Number,
         required : [false]
@@ -72,7 +73,17 @@ const userDataSchema = mongoose.Schema({
     userGender : {
         type : String, 
         required : [false]
-    }
+    },
+
+    userActivity : {
+	type : String,
+	    required : [false]
+    },
+	userPurpose : {
+		type : String,
+		required : [false]
+	}
+
 })
 
 const userData = mongoose.model("userData", userDataSchema)
