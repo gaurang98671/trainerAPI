@@ -1,5 +1,6 @@
 const exerciseModel = require("../models/exercise")
 const userModel = require("../models/user_data_model")
+const exercise = require("../routes/exercise")
 /** 
  * TODOS
  * Add middleware to check if admin for postEx
@@ -51,7 +52,7 @@ exports.getExercises = async (req, res) => {
     }
 }
 
-exports.getAllExercise = async(req, res) => {
+exports.getAllExercises = async(req, res) => {
     try{
         exercises = await exerciseModel.find()
         res.status(200).json(exercises)
@@ -65,15 +66,22 @@ exports.getAllExercise = async(req, res) => {
 }
 exports.postExercise = async (req, res) => {
     try{
-        const {exerciseName, muscleGroup, exerciseDifficulty, exerciseModelPath} = req.body
+        const {exerciseName, muscleGroups, exerciseDifficulty, exerciseModelPath} = req.body
 
-        if(!exerciseName || !muscleGroup || !exerciseDifficulty || !exerciseModelPath){
+        if(!exerciseName || !muscleGroups || !exerciseDifficulty || !exerciseModelPath){
             res.status(401).json({
                 "message" : "exerciseName or muscleGroup or exerciseDifficulty or exerciseModelPath is missing"
             })
         }
         else{
-        
+            var exercise = await exerciseModel.find({'exerciseName' : exerciseName})
+            
+            if(exercise.length != 0){
+                res.status(409).json({
+                    "message" : "Exercise already exists"
+                })
+            }
+            else{
             const exerciseObj = {...req.body}
             console.log("exercise", exerciseObj)
             exerciseModel.create(exerciseObj, function(err, doc){
@@ -88,7 +96,7 @@ exports.postExercise = async (req, res) => {
                     res.status(200).json(doc)
                 }
             })
-            
+        }
         }
     }
     catch(e){

@@ -1,8 +1,10 @@
 FROM node:14
-WORKDIR /app
-COPY package.json /app
+WORKDIR /trainerApi
+COPY package.json /trainerApi
 RUN npm install
-COPY . /app
+RUN ls
+
+COPY . /trainerApi
 ENV PORT=8080
 EXPOSE ${PORT}
 CMD ["node", "app.js"]
